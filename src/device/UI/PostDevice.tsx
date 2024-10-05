@@ -1,7 +1,5 @@
 import { Fragment, useState } from "react";
 
-import { initializeApp } from "firebase/app";
-import { getMessaging, getToken } from "firebase/messaging";
 import "firebase/messaging";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,15 +12,6 @@ import { postDevice } from "../API";
 import { Button } from "../../shared/UI/Button";
 import { Loader } from "../../shared/UI/Loader";
 
-const firebaseConfig = {
-  apiKey: "",
-  authDomain:  "",
-  projectId:  "",
-  storageBucket:  "",
-  messagingSenderId: "",
-  appId:  "",
-  measurementId:  "",
-};
 
 //initializeApp(firebaseConfig);
 
