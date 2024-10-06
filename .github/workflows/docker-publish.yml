@@ -22,20 +22,20 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}  
+          username: ${{ secrets.DOCKER_USERNAME }}  # Ensure your Docker Hub username is set in GitHub secrets
+          password: ${{ secrets.DOCKER_TOKEN }}      # Ensure your Docker Hub token is set in GitHub secrets
 
       # Step 4: Build and push the Docker image to Docker Hub
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: aurits/docease-frontend:latest  # Tag your Docker image appropriately
+          context: .                            # Set the build context
+          file: ./Dockerfile                    # Path to your Dockerfile
+          platforms: linux/amd64                # Specify the target platform
+          push: true                            # Push the image after building
+          tags: kirabo793/docease-frontend:latest  # Tag your Docker image
 
       # Step 5: Verify the image has been pushed (optional)
       - name: Verify Docker image
         run: |
-          docker pull aurits/docease-frontend:latest
+          docker pull kirabo793/docease-frontend:latest  # Attempt to pull the image to verify it was pushed successfully
