@@ -33,9 +33,9 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: aurits/docease-frontend:latest  # Tag your Docker image appropriately
+          tags: kirabo793/docease-frontend:latest  # Tag your Docker image appropriately
 
       # Step 5: Verify the image has been pushed (optional)
       - name: Verify Docker image
         run: |
-          docker pull aurits/docease-frontend:latest
+          docker pull kirabo793/docease-frontend:latest
