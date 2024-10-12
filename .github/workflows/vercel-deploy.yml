@@ -37,8 +37,8 @@ jobs:
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             # Deploy to Production when pushing to main
-            npx vercel --prod --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID --scope $
+            npx vercel --prod --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID 
           elif [[ "${{ github.ref }}" == "refs/heads/staging-branch" ]]; then
             # Deploy Preview when pushing to staging
-            npx vercel --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID --scope $
+            npx vercel --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID 
           fi
