@@ -21,10 +21,10 @@ jobs:
           node-version: "16" # Specify your project's Node.js version.
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Build the project
-        run: npm run build
+        run: pnpm run build
 
       - name: Deploy to Vercel
         env:
@@ -34,8 +34,8 @@ jobs:
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             # Deploy to Production when pushing to main
-            npx vercel --prod --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID --scope $VERCEL_ORG_ID
-          elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+            npx vercel --prod --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID --scope $
+          elif [[ "${{ github.ref }}" == "refs/heads/staging-branch" ]]; then
             # Deploy Preview when pushing to staging
             npx vercel --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID --scope $
           fi
