@@ -38,6 +38,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: "--prod"
+        continue-on-error: true # Allow workflow to continue on failure
 
       # Deploy to Vercel Preview when pushing to staging
       - name: Deploy to Vercel (Preview)
@@ -47,3 +48,18 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        continue-on-error: true # Allow workflow to continue on failure
+
+      # Rollback on Failure for Production
+      - name: Rollback Production Deployment
+        if: failure() && github.ref == 'refs/heads/main'
+        run: |
+          echo "Production deployment failed. Rolling back to previous deployment..."
+          npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --rollback
+
+      # Rollback on Failure for Preview (Staging)
+      - name: Rollback Preview Deployment
+        if: failure() && github.ref == 'refs/heads/staging'
+        run: |
+          echo "Staging deployment failed. Rolling back to previous deployment..."
+          npx vercel --token ${{ secrets.VERCEL_TOKEN }} --rollback
