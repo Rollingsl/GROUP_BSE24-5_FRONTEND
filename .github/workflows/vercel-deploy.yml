@@ -61,10 +61,5 @@ jobs:
       - name: Rollback Preview Deployment
         if: failure() && github.ref == 'refs/heads/staging'
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            # Deploy to Production when pushing to main
-            npx vercel --prod --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID 
-          elif [[ "${{ github.ref }}" == "refs/heads/staging-branch" ]]; then
-            # Deploy Preview when pushing to staging
-            npx vercel --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID 
-          fi
+          echo "Staging deployment failed. Rolling back to previous deployment..."
+          npx vercel --token ${{ secrets.VERCEL_TOKEN }} --rollback
