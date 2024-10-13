@@ -29,16 +29,42 @@ jobs:
       - name: Build the project
         run: pnpm run build
 
-      - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      
+      # Deploy to Vercel Production when pushing to main
+      - name: Deploy to Vercel (Production)
+        if: github.ref == 'refs/heads/main'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
+        continue-on-error: true # Allow workflow to continue on failure
+
+      # Deploy to Vercel Preview when pushing to staging
+      - name: Deploy to Vercel (Preview)
+        if: github.ref == 'refs/heads/staging'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        continue-on-error: true # Allow workflow to continue on failure
+
+      # Rollback on Failure for Production
+      - name: Rollback Production Deployment
+        if: failure() && github.ref == 'refs/heads/main'
+        run: |
+          echo "Production deployment failed. Rolling back to previous deployment..."
+          npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --rollback
+
+      # Rollback on Failure for Preview (Staging)
+      - name: Rollback Preview Deployment
+        if: failure() && github.ref == 'refs/heads/staging'
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             # Deploy to Production when pushing to main
-            npx vercel --prod --token $VERCEL_TOKEN  
+            npx vercel --prod --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID 
           elif [[ "${{ github.ref }}" == "refs/heads/staging-branch" ]]; then
             # Deploy Preview when pushing to staging
-            npx vercel --token $VERCEL_TOKEN 
+            npx vercel --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID 
           fi
