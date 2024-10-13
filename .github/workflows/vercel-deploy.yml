@@ -63,3 +63,6 @@ jobs:
         run: |
           echo "Staging deployment failed. Rolling back to previous deployment..."
           npx vercel --token ${{ secrets.VERCEL_TOKEN }} --rollback
+
+
+
