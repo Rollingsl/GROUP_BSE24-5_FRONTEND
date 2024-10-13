@@ -3,8 +3,8 @@ name: Vercel Deploy
 on:
   push:
     branches:
-      - main # Deploys to production on the main branch.
-      - staging # Deploys a preview build on the staging branch.
+      - main # Deploy to production on main branch.
+      - staging # Deploy a preview build on staging branch.
 
 jobs:
   deploy:
@@ -18,7 +18,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18 # Specify your project's Node.js version.
+          node-version: 18
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -29,16 +29,19 @@ jobs:
       - name: Build the project
         run: pnpm run build
 
-      - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            # Deploy to Production when pushing to main
-            npx vercel --prod --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID 
-          elif [[ "${{ github.ref }}" == "refs/heads/staging-branch" ]]; then
-            # Deploy Preview when pushing to staging
-            npx vercel --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID 
-          fi
+      # Deploy to Vercel (Production)
+      - name: Deploy to Vercel (Production)
+        if: github.ref == 'refs/heads/main'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
+
+      # Deploy to Vercel (Preview)
+      - name: Deploy to Vercel (Preview)
+        if: github.ref == 'refs/heads/staging'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
