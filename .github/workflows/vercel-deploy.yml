@@ -5,6 +5,9 @@ on:
     branches:
       - main # Deploys to production on the main branch.
       - staging # Deploys a preview build on the staging branch.
+  pull_request:
+    branches:
+      - main # Triggers a build when a PR is opened against main.
 
 jobs:
   deploy:
