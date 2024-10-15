@@ -16,7 +16,7 @@ import femaleDoctor from "../../assets/images/female-doctor.jpeg";
 import { SquareDots } from "../UI/SquareDots";
 import { LandingAppointmentSection } from "../layout/LandingAppointmentSection";
 import { ContactUs } from "../layout/ContactUs";
-import { NewsLetter } from "../layout/NewsLetter";
+import { NewsLetter } from "../layout/NewsLetter";// ...
 import { Footer } from "../../shared/layout/Footer";
 
 export const LandingPage: React.FC = () => {
