@@ -106,3 +106,4 @@ export const DoctorAppointmentList: React.FC = () => {
     </Fragment>
   );
 };
+
